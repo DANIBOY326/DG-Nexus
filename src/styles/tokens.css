@@ -1,0 +1,69 @@
+/* ============================================================================
+   DG NEXUS — Canonical Design Tokens (Derived from Flowstep Screen 86)
+   Accessibility: All text tokens verified for WCAG 2.1 AA on light surfaces
+   ============================================================================ */
+:root {
+  /* Brand & Action Colours */
+  --color-brand-primary: #1d4ed8;
+  --color-brand-primary-hover: #1e40af;
+  --color-brand-primary-soft: #eff6ff;
+  --color-brand-gradient: linear-gradient(135deg, #1d4ed8 0%, #0f4c81 100%);
+
+  /* Neutral Surfaces & Borders (Light-First Enterprise Canvas) */
+  --color-bg-canvas: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-subtle: #f1f5f9;
+  --color-border-default: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  /* Neutral Typography */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+
+  /* Semantic Colours (Icon/Surface + WCAG AA Text Shades) */
+  --color-success: #10b981;
+  --color-success-soft: #ecfdf5;
+  --color-success-text: #047857;
+
+  --color-warning: #f59e0b;
+  --color-warning-soft: #fffbeb;
+  --color-warning-text: #b45309;
+
+  --color-danger: #ef4444;
+  --color-danger-soft: #fef2f2;
+  --color-danger-text: #b91c1c;
+
+  /* Dedicated Nexus AI Surface Grammar */
+  --color-ai-surface: #eef2ff;
+  --color-ai-border: #c7d2fe;
+  --color-ai-accent: #4338ca;
+
+  /* Data Visualisation Palette (Screen 86 chart1-chart5) */
+  --color-chart-1: #1d4ed8;
+  --color-chart-2: #0ea5e9;
+  --color-chart-3: #10b981;
+  --color-chart-4: #f59e0b;
+  --color-chart-5: #6366f1;
+
+  /* Typography */
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Radius & Elevation */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 9999px;
+
+  --shadow-1: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-2: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-3: 0 10px 24px rgba(15, 23, 42, 0.1);
+
+  /* Layout Constants */
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 72px;
+  --topbar-height: 64px;
+  --mobile-nav-height: 64px;
+  --touch-target-min: 44px;
+}
