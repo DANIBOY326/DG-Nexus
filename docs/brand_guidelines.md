@@ -14,7 +14,10 @@
 * **Parent Brand Rule:** Show `DG NEXUS` alone inside everyday application navigation and workspaces. Attribute `by DGConcept` in marketing footers, legal notices, splash/about pages, and institutional documentation.
 
 ## 2. Logo Usage & Variations
-* **Primary Mark:** Hexagonal network node mark representing the Unified Professional Graph, paired with the `DG NEXUS` wordmark in `Inter` Bold/SemiBold.
+* **Primary Mark Geometry:** Rounded-square badge enclosing a regular hexagon with a central hub node connected by three radial spokes (`top`, `bottom-left`, `bottom-right`), representing the Unified Professional Graph.
+* **Approved Variants (Archived in `public/brand/`):**
+  * **Light-Surface Primary (`public/brand/logo-mark.svg`):** Royal Blue gradient container (`#1D4ED8 → #0F4C81`) with crisp white hexagonal node geometry — default for everyday light-mode application chrome, navigation rails, and PWA install icon.
+  * **Dark-Surface Emblem (`public/brand/logo-mark-dark.svg`):** Deep navy container (`#0B1120`) with sky-blue (`#38BDF8`) border and hexagonal node mark (derived directly from the founder's approved logo emblem sample) — approved for dark surfaces, favicons on dark browser themes, and future dark-mode chrome.
 * **Clear Space:** Maintain at least `0.5x` the icon height on all sides.
 * **Do Not:** Stretch, apply heavy neon glow shadows, place on clashing busy backgrounds, or recolour outside approved brand tokens.
 
