@@ -1,0 +1,56 @@
+name: DG NEXUS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-and-security:
+    name: Typecheck, Lint, Test, Security & Build
+    runs-on: ubuntu-latest # 1x multiplier on GitHub Free 2,000 mins/mo (TDR-015)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Guard against client-side secret exposure
+        run: |
+          if grep -rn "SUPABASE_SERVICE_ROLE_KEY" src/components src/app; then
+            echo "ERROR: SUPABASE_SERVICE_ROLE_KEY referenced in app/components layer!"
+            exit 1
+          fi
+
+      - name: Security audit (high & critical)
+        run: npm audit --audit-level=high
+
+      - name: TypeScript typecheck
+        run: npm run typecheck
+
+      - name: ESLint check
+        run: npm run lint
+
+      - name: Unit tests (Vitest)
+        run: npm run test
+
+      - name: Production build check
+        env:
+          NEXT_PUBLIC_APP_ENV: staging
+          NEXT_PUBLIC_SITE_URL: https://staging.dgnexus.example
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder-ci-project.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key-at-least-20-chars
+        run: npm run build
