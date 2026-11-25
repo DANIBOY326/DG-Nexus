@@ -7,6 +7,7 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
 
 const PROTECTED_APP_PREFIXES = [
   "/home",
+  "/onboarding",
   "/opportunities",
   "/network",
   "/ai",

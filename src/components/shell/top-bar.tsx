@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserCircle2 } from "lucide-react";
+import { Bell, Search } from "lucide-react";
+import { AccountMenu } from "@/components/shell/account-menu";
 import { BrandMark } from "@/components/ui/brand-mark";
 
 interface TopBarProps {
   onOpenSearch: () => void;
   userEmail?: string | null;
+  fullName?: string | null;
 }
 
-export function TopBar({ onOpenSearch, userEmail }: TopBarProps) {
+export function TopBar({ onOpenSearch, userEmail, fullName }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-14 md:h-16 items-center justify-between gap-3 border-b border-border-base bg-surface/95 px-4 md:px-6 backdrop-blur-xs">
       <div className="flex items-center gap-3 md:hidden">
@@ -52,16 +54,7 @@ export function TopBar({ onOpenSearch, userEmail }: TopBarProps) {
           <Bell className="h-5 w-5" aria-hidden="true" />
         </Link>
 
-        <Link
-          href="/profile"
-          aria-label="Account profile"
-          className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2.5 text-sm font-medium text-ink-secondary hover:bg-subtle hover:text-ink"
-        >
-          <UserCircle2 className="h-6 w-6 text-brand shrink-0" aria-hidden="true" />
-          <span className="hidden lg:inline max-w-[160px] truncate">
-            {userEmail ?? "Member"}
-          </span>
-        </Link>
+        <AccountMenu userEmail={userEmail} fullName={fullName} />
       </div>
     </header>
   );

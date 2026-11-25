@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { GoogleOAuthButton } from "@/components/auth/google-oauth-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,12 +15,17 @@ import {
 } from "@/components/ui/card";
 import { Input, Label } from "@/components/ui/input";
 import { signInAction, type AuthActionState } from "@/modules/identity/actions";
+import { mapAuthCallbackError } from "@/modules/identity/oauth";
 
 const initialState: AuthActionState = { status: "idle", message: "" };
 
 function SignInForm() {
   const searchParams = useSearchParams();
   const nextPath = searchParams.get("next") ?? "/home";
+  const callbackError = mapAuthCallbackError(
+    searchParams.get("error"),
+    searchParams.get("error_description")
+  );
   const [state, formAction, isPending] = React.useActionState(signInAction, initialState);
 
   return (
@@ -29,7 +35,26 @@ function SignInForm() {
         <CardDescription>Sign in to your DG NEXUS professional workspace.</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-5">
+        {callbackError && (
+          <div
+            role="alert"
+            className="rounded-lg border border-warning/40 bg-warning-soft px-3.5 py-2.5 text-sm text-warning-text"
+          >
+            {callbackError}
+          </div>
+        )}
+
+        <GoogleOAuthButton mode="sign-in" nextPath={nextPath} />
+
+        <div className="relative flex items-center">
+          <div className="flex-1 border-t border-border-base" />
+          <span className="px-3 text-xs font-medium text-ink-muted">
+            or sign in with email
+          </span>
+          <div className="flex-1 border-t border-border-base" />
+        </div>
+
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="next" value={nextPath} />
 

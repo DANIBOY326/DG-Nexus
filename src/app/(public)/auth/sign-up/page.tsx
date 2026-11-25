@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { GoogleOAuthButton } from "@/components/auth/google-oauth-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,10 +15,16 @@ import {
 } from "@/components/ui/card";
 import { Input, Label } from "@/components/ui/input";
 import { signUpAction, type AuthActionState } from "@/modules/identity/actions";
+import { mapAuthCallbackError } from "@/modules/identity/oauth";
 
 const initialState: AuthActionState = { status: "idle", message: "" };
 
-export default function SignUpPage() {
+function SignUpForm() {
+  const searchParams = useSearchParams();
+  const callbackError = mapAuthCallbackError(
+    searchParams.get("error"),
+    searchParams.get("error_description")
+  );
   const [state, formAction, isPending] = React.useActionState(signUpAction, initialState);
 
   return (
@@ -28,7 +36,32 @@ export default function SignUpPage() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-5">
+        {callbackError && (
+          <div
+            role="alert"
+            className="rounded-lg border border-warning/40 bg-warning-soft px-3.5 py-2.5 text-sm text-warning-text"
+          >
+            {callbackError}
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <GoogleOAuthButton mode="sign-up" nextPath="/onboarding" />
+          <p className="text-center text-[11px] text-ink-muted">
+            By continuing with Google, you agree to the DG NEXUS Terms of Service and Privacy
+            Policy.
+          </p>
+        </div>
+
+        <div className="relative flex items-center">
+          <div className="flex-1 border-t border-border-base" />
+          <span className="px-3 text-xs font-medium text-ink-muted">
+            or register with email
+          </span>
+          <div className="flex-1 border-t border-border-base" />
+        </div>
+
         <form action={formAction} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="signup-name" required>
@@ -80,8 +113,8 @@ export default function SignUpPage() {
               className="mt-0.5 h-4 w-4 rounded border-border-strong accent-brand"
             />
             <span>
-              I agree to the DG NEXUS Terms of Service and Privacy Policy (GDPR &amp; NDPA
-              compliant; your consent is recorded).
+              I agree to the DG NEXUS Terms of Service and Privacy Policy (your consent
+              acceptance is logged for transparency).
             </span>
           </label>
 
@@ -118,5 +151,13 @@ export default function SignUpPage() {
         </span>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <React.Suspense fallback={<Card className="p-6 text-sm text-ink-muted">Loading...</Card>}>
+      <SignUpForm />
+    </React.Suspense>
   );
 }
