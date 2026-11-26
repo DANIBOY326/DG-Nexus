@@ -118,7 +118,10 @@ export default async function HomePage() {
                   </div>
                 )}
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex-wrap gap-2">
+                <Button size="sm" asChild>
+                  <Link href="/profile">Open Proof-of-Work Profile</Link>
+                </Button>
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/onboarding?revisit=1">Update Onboarding</Link>
                 </Button>
