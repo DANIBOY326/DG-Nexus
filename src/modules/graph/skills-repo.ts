@@ -69,10 +69,9 @@ export async function replaceUserProfileSkills(
     throw new Error(`Failed to read existing profile skills: ${fetchError.message}`);
   }
 
+  const existingIds = new Set((existing ?? []).map((row) => row.skill_id));
   const targetIds = new Set(deduped.map((s) => s.skillId));
-  const toDelete = (existing ?? [])
-    .map((row) => row.skill_id)
-    .filter((id) => !targetIds.has(id));
+  const toDelete = [...existingIds].filter((id) => !targetIds.has(id));
 
   if (toDelete.length > 0) {
     const { error: deleteError } = await supabase
@@ -86,20 +85,37 @@ export async function replaceUserProfileSkills(
     }
   }
 
-  if (deduped.length > 0) {
-    const rows = deduped.map((item) => ({
+  // Insert brand-new skills as self_reported; update proficiency_level only for existing
+  // skills so DB-managed evidence_status (e.g. portfolio_supported) is strictly preserved.
+  const toInsert = deduped
+    .filter((item) => !existingIds.has(item.skillId))
+    .map((item) => ({
       user_id: userId,
       skill_id: item.skillId,
       proficiency_level: item.proficiencyLevel,
       evidence_status: "self_reported" as const,
     }));
 
-    const { error: upsertError } = await supabase
+  if (toInsert.length > 0) {
+    const { error: insertError } = await supabase
       .from("profile_skills")
-      .upsert(rows, { onConflict: "user_id,skill_id" });
+      .insert(toInsert);
 
-    if (upsertError) {
-      throw new Error(`Failed to save profile skills: ${upsertError.message}`);
+    if (insertError) {
+      throw new Error(`Failed to save new profile skills: ${insertError.message}`);
+    }
+  }
+
+  const toUpdate = deduped.filter((item) => existingIds.has(item.skillId));
+  for (const item of toUpdate) {
+    const { error: updateError } = await supabase
+      .from("profile_skills")
+      .update({ proficiency_level: item.proficiencyLevel })
+      .eq("user_id", userId)
+      .eq("skill_id", item.skillId);
+
+    if (updateError) {
+      throw new Error(`Failed to update skill proficiency: ${updateError.message}`);
     }
   }
 }
