@@ -116,7 +116,7 @@ export function ProfileWorkspace({
                 <img
                   src={profile.avatar_url}
                   alt={profile.full_name || "Member avatar"}
-                  className="h-20 w-20 rounded-2xl border-4 border-surface bg-surface object-cover shadow-[var(--shadow-2)] sm:h-24 sm:w-24"
+                  className="h-20 w-20 rounded-2xl border-4 border-surface bg-surface object-cover object-top shadow-[var(--shadow-2)] sm:h-24 sm:w-24"
                 />
               ) : (
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-brand-soft text-xl font-bold text-brand shadow-[var(--shadow-2)] sm:h-24 sm:w-24 sm:text-2xl">

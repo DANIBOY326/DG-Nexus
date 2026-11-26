@@ -150,7 +150,7 @@ export default async function PublicProfilePage(props: {
                   <img
                     src={avatarSrc}
                     alt={profile.full_name}
-                    className="h-24 w-24 rounded-2xl border-4 border-surface bg-surface object-cover shadow-[var(--shadow-2)]"
+                    className="h-24 w-24 rounded-2xl border-4 border-surface bg-surface object-cover object-top shadow-[var(--shadow-2)]"
                   />
                 ) : (
                   <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-brand-soft text-2xl font-bold text-brand shadow-[var(--shadow-2)]">
