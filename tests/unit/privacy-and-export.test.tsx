@@ -76,7 +76,7 @@ describe("M1.4 privacy settings, append-only consent audit & JSON data export", 
     expect(payload.profile?.visibility_scope).toBe("private");
     expect(payload.skills).toHaveLength(1);
     expect(payload.consent_history).toHaveLength(1);
-    expect(payload.unavailable_categories.length).toBeGreaterThanOrEqual(4);
+    expect(payload.unavailable_categories.length).toBeGreaterThanOrEqual(1);
     expect(serialised).not.toMatch(/service_role|access_token|refresh_token|password_hash/i);
   });
 

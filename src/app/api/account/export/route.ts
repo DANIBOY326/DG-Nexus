@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { listUserOrganisations } from "@/modules/organisations/repo";
+import { listUserOpportunityExportData } from "@/modules/opportunities/repo";
 import { getMemberPortfolioBundle } from "@/modules/portfolio/repo";
 import { buildPersonalDataExportPayload } from "@/modules/profiles/export";
 import { listOwnConsentLogs } from "@/modules/profiles/repo";
@@ -35,10 +36,14 @@ export async function GET() {
   }
 
   try {
-    const [bundle, consentLogs, orgs] = await Promise.all([
+    const [bundle, consentLogs, orgs, oppExport] = await Promise.all([
       getMemberPortfolioBundle(user.id),
       listOwnConsentLogs(user.id),
       listUserOrganisations(user.id),
+      listUserOpportunityExportData(user.id).catch(() => ({
+        bookmarks: [],
+        applications: [],
+      })),
     ]);
 
     const evidenceFiles = bundle
@@ -68,6 +73,8 @@ export async function GET() {
       credentials: bundle?.credentials ?? [],
       portfolioProjects: bundle?.projects ?? [],
       evidenceFiles,
+      opportunityBookmarks: oppExport.bookmarks,
+      opportunityApplications: oppExport.applications,
       organisations: orgs.map((entry) => ({
         organisationId: entry.organisation.id,
         organisationName: entry.organisation.name,

@@ -216,7 +216,7 @@ describe("M2.5–M2.7 evidence file magic-byte security, path safety & M2 JSON e
       consentLogs: [],
     });
 
-    expect(payload.export_metadata.schema_version).toBe("2.0.0-m2");
+    expect(payload.export_metadata.schema_version).toBe("3.0.0-m3");
     expect(payload.experiences).toHaveLength(1);
     expect(payload.portfolio_projects[0]?.linked_skills).toEqual(["Figma"]);
     expect(payload.evidence_files[0]?.file_name).toBe("case-study.pdf");

@@ -359,19 +359,20 @@ export function PrivacySettingsClient({
 
           <CardContent className="space-y-3 text-xs text-ink-secondary">
             <div className="rounded-xl border border-border-base bg-canvas p-4 space-y-2">
-              <p className="font-semibold text-ink">Included in Milestone M2 export (v2.0.0-m2):</p>
+              <p className="font-semibold text-ink">Included in Milestone M3 export (v3.0.0-m3):</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Account metadata (user ID, email, auth provider, timestamps)</li>
                 <li>Profile basics, biography, public handle, links, domains, goals &amp; availability</li>
                 <li>Canonical skills, proficiency levels &amp; evidence status</li>
                 <li>Professional experience, education pathways, credentials, portfolio projects &amp; evidence file metadata</li>
+                <li>Saved opportunity bookmarks &amp; private application tracker records</li>
                 <li>Organisation memberships and full append-only consent audit history</li>
               </ul>
               <p className="pt-1 text-ink-muted">
                 Excluded by security design: passwords, session tokens, privileged keys,
                 internal storage paths, internal security logs, and other users&rsquo; data. Raw
-                binary files and categories from later milestones (applications [M3], AI logs
-                [M4], messages [M5]) are explicitly disclosed in the export manifest.
+                binary files and categories from later milestones (AI logs [M4], messages [M5])
+                are explicitly disclosed in the export manifest.
               </p>
             </div>
 

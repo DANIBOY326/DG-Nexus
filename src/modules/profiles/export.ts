@@ -157,6 +157,26 @@ export interface PersonalDataExportPayload {
     visibility_scope: string;
     uploaded_at: string;
   }>;
+  opportunity_bookmarks: Array<{
+    id: string;
+    opportunity_id: string;
+    opportunity_title: string;
+    organisation_name: string;
+    notes: string;
+    saved_at: string;
+  }>;
+  opportunity_applications: Array<{
+    id: string;
+    opportunity_id: string;
+    opportunity_title: string;
+    organisation_name: string;
+    status: string;
+    personal_notes: string;
+    external_reference: string;
+    submitted_at: string | null;
+    next_reminder_at: string | null;
+    updated_at: string;
+  }>;
   organisation_memberships: Array<{
     organisation_id: string;
     organisation_name: string;
@@ -189,6 +209,8 @@ export function buildPersonalDataExportPayload(input: {
   credentials?: CredentialWithDetails[];
   portfolioProjects?: PortfolioProjectWithDetails[];
   evidenceFiles?: EvidenceFileRow[];
+  opportunityBookmarks?: PersonalDataExportPayload["opportunity_bookmarks"];
+  opportunityApplications?: PersonalDataExportPayload["opportunity_applications"];
   organisations: ExportOrgMembershipInput[];
   consentLogs: ConsentLogRow[];
   exportedAt?: string;
@@ -198,10 +220,12 @@ export function buildPersonalDataExportPayload(input: {
   const credentials = input.credentials ?? [];
   const portfolioProjects = input.portfolioProjects ?? [];
   const evidenceFiles = input.evidenceFiles ?? [];
+  const opportunityBookmarks = input.opportunityBookmarks ?? [];
+  const opportunityApplications = input.opportunityApplications ?? [];
 
   return {
     export_metadata: {
-      schema_version: "2.0.0-m2",
+      schema_version: "3.0.0-m3",
       exported_at_utc: input.exportedAt ?? new Date().toISOString(),
       product: "DG NEXUS (by DGConcept)",
       notice:
@@ -336,6 +360,8 @@ export function buildPersonalDataExportPayload(input: {
       visibility_scope: f.visibility_scope,
       uploaded_at: f.created_at,
     })),
+    opportunity_bookmarks: opportunityBookmarks,
+    opportunity_applications: opportunityApplications,
     organisation_memberships: input.organisations.map((o) => ({
       organisation_id: o.organisationId,
       organisation_name: o.organisationName,
@@ -355,16 +381,12 @@ export function buildPersonalDataExportPayload(input: {
           "Metadata for all uploaded evidence files is included above. Raw binary images and PDFs are not inlined into JSON; members can download each owned file securely via authenticated signed URLs from /profile.",
       },
       {
-        category: "opportunity_bookmarks_and_applications",
-        reason: "Not yet implemented in Milestone M2 (scheduled for Milestone M3).",
-      },
-      {
         category: "nexus_ai_usage_history",
-        reason: "Not yet implemented in Milestone M2 (scheduled for Milestone M4).",
+        reason: "Not yet implemented in Milestone M3 (scheduled for Milestone M4).",
       },
       {
         category: "connections_and_direct_messages",
-        reason: "Not yet implemented in Milestone M2 (scheduled for Milestone M5).",
+        reason: "Not yet implemented in Milestone M3 (scheduled for Milestone M5).",
       },
     ],
   };
