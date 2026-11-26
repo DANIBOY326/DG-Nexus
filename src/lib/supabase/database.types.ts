@@ -1,9 +1,10 @@
 /**
- * Typed PostgreSQL schema contract matching M0 + M1 + M2 migrations:
+ * Typed PostgreSQL schema contract matching M0 + M1 + M2 + M3 migrations:
  * - 202611240001_m0_foundation.sql
  * - 202611240002_m0_role_grants.sql
  * - 202611250001_m1_onboarding_skills_privacy.sql
  * - 202611260001_m2_profiles_portfolio_evidence.sql
+ * - 202611260002_m3_opportunities_applications.sql
  */
 export type Json =
   | string
@@ -12,6 +13,38 @@ export type Json =
   | null
   | { [key: string]: Json | undefined }
   | Json[];
+
+export type OpportunityType =
+  | "job"
+  | "internship"
+  | "scholarship"
+  | "fellowship"
+  | "grant"
+  | "hackathon"
+  | "accelerator"
+  | "competition"
+  | "volunteer";
+export type OpportunityWorkArrangement = "remote" | "hybrid" | "onsite" | "global_online";
+export type CompensationType =
+  | "salary"
+  | "stipend"
+  | "grant_award"
+  | "tuition_funding"
+  | "equity"
+  | "unpaid"
+  | "unspecified";
+export type ExperienceLevel = "entry" | "early_career" | "mid_level" | "senior" | "any";
+export type OpportunityVerificationStatus = "unverified" | "curated" | "partner_verified";
+export type OpportunityPublicationStatus = "draft" | "published" | "closed" | "archived";
+export type ApplicationStatus =
+  | "saved"
+  | "preparing"
+  | "submitted"
+  | "interviewing"
+  | "offer"
+  | "accepted"
+  | "rejected"
+  | "withdrawn";
 
 export type VisibilityScope = "public" | "connections" | "organisation" | "private";
 export type RecordVisibilityScope = "public" | "connections" | "private";
@@ -927,6 +960,231 @@ export type Database = {
           created_at?: string;
         };
         Relationships: [];
+      };
+      opportunities: {
+        Row: {
+          id: string;
+          slug: string;
+          organisation_id: string | null;
+          organisation_name: string;
+          opportunity_type: OpportunityType;
+          title: string;
+          summary: string;
+          description: string;
+          domain_tags: string[];
+          work_arrangement: OpportunityWorkArrangement;
+          location_label: string;
+          eligible_countries: string[];
+          compensation_type: CompensationType;
+          compensation_min: number | null;
+          compensation_max: number | null;
+          currency_code: string | null;
+          experience_level: ExperienceLevel;
+          eligibility_criteria: string[];
+          application_url: string | null;
+          application_method: "external_link" | "dg_nexus_apply";
+          deadline_at: string | null;
+          is_rolling: boolean;
+          verification_status: OpportunityVerificationStatus;
+          publication_status: OpportunityPublicationStatus;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          organisation_id?: string | null;
+          organisation_name: string;
+          opportunity_type: OpportunityType;
+          title: string;
+          summary: string;
+          description?: string;
+          domain_tags?: string[];
+          work_arrangement?: OpportunityWorkArrangement;
+          location_label?: string;
+          eligible_countries?: string[];
+          compensation_type?: CompensationType;
+          compensation_min?: number | null;
+          compensation_max?: number | null;
+          currency_code?: string | null;
+          experience_level?: ExperienceLevel;
+          eligibility_criteria?: string[];
+          application_url?: string | null;
+          application_method?: "external_link" | "dg_nexus_apply";
+          deadline_at?: string | null;
+          is_rolling?: boolean;
+          verification_status?: OpportunityVerificationStatus;
+          publication_status?: OpportunityPublicationStatus;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          organisation_id?: string | null;
+          organisation_name?: string;
+          opportunity_type?: OpportunityType;
+          title?: string;
+          summary?: string;
+          description?: string;
+          domain_tags?: string[];
+          work_arrangement?: OpportunityWorkArrangement;
+          location_label?: string;
+          eligible_countries?: string[];
+          compensation_type?: CompensationType;
+          compensation_min?: number | null;
+          compensation_max?: number | null;
+          currency_code?: string | null;
+          experience_level?: ExperienceLevel;
+          eligibility_criteria?: string[];
+          application_url?: string | null;
+          application_method?: "external_link" | "dg_nexus_apply";
+          deadline_at?: string | null;
+          is_rolling?: boolean;
+          verification_status?: OpportunityVerificationStatus;
+          publication_status?: OpportunityPublicationStatus;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      opportunity_skills: {
+        Row: {
+          id: string;
+          opportunity_id: string;
+          skill_id: string;
+          requirement_level: "required" | "preferred";
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          opportunity_id: string;
+          skill_id: string;
+          requirement_level?: "required" | "preferred";
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          opportunity_id?: string;
+          skill_id?: string;
+          requirement_level?: "required" | "preferred";
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_skills_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_skills_skill_id_fkey";
+            columns: ["skill_id"];
+            isOneToOne: false;
+            referencedRelation: "skills";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      opportunity_bookmarks: {
+        Row: {
+          id: string;
+          user_id: string;
+          opportunity_id: string;
+          notes: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          opportunity_id: string;
+          notes?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          opportunity_id?: string;
+          notes?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_bookmarks_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_bookmarks_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
+      opportunity_applications: {
+        Row: {
+          id: string;
+          user_id: string;
+          opportunity_id: string;
+          status: ApplicationStatus;
+          personal_notes: string;
+          external_reference: string;
+          submitted_at: string | null;
+          next_reminder_at: string | null;
+          fit_snapshot: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          opportunity_id: string;
+          status?: ApplicationStatus;
+          personal_notes?: string;
+          external_reference?: string;
+          submitted_at?: string | null;
+          next_reminder_at?: string | null;
+          fit_snapshot?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          opportunity_id?: string;
+          status?: ApplicationStatus;
+          personal_notes?: string;
+          external_reference?: string;
+          submitted_at?: string | null;
+          next_reminder_at?: string | null;
+          fit_snapshot?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_applications_opportunity_id_fkey";
+            columns: ["opportunity_id"];
+            isOneToOne: false;
+            referencedRelation: "opportunities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "opportunity_applications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
       };
     };
     Views: {
