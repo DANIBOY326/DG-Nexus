@@ -1,15 +1,10 @@
-import { Briefcase } from "lucide-react";
-import { EmptyState } from "@/components/ui/empty-state";
+import { OpportunitiesWorkspace } from "@/components/opportunities/opportunities-workspace";
+import { requireUser } from "@/modules/identity/guards";
+import { getOpportunityWorkspaceBundle } from "@/modules/opportunities/repo";
 
-export default function OpportunitiesPage() {
-  return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold tracking-tight text-ink">Opportunities</h1>
-      <EmptyState
-        icon={<Briefcase className="h-6 w-6" />}
-        title="Opportunities Engine — Scheduled for Milestone M3"
-        description="Global and regional opportunity search, structured eligibility criteria, bookmarking, and application tracking will be built here."
-      />
-    </div>
-  );
+export default async function OpportunitiesPage() {
+  const user = await requireUser("/opportunities");
+  const bundle = await getOpportunityWorkspaceBundle(user.id);
+
+  return <OpportunitiesWorkspace bundle={bundle} />;
 }
