@@ -108,38 +108,24 @@ export function ProfileWorkspace({
           style={{ background: "var(--color-brand-gradient)" }}
           aria-hidden="true"
         />
-        <CardContent className="-mt-12 space-y-4 pb-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex items-end gap-4">
+        <CardContent className="space-y-4 pt-0 pb-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="-mt-10 shrink-0">
               {profile.avatar_url ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={profile.avatar_url}
                   alt={profile.full_name || "Member avatar"}
-                  className="h-20 w-20 rounded-2xl border-4 border-surface bg-surface object-cover shadow-[var(--shadow-2)]"
+                  className="h-20 w-20 rounded-2xl border-4 border-surface bg-surface object-cover shadow-[var(--shadow-2)] sm:h-24 sm:w-24"
                 />
               ) : (
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-brand-soft text-xl font-bold text-brand shadow-[var(--shadow-2)]">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-brand-soft text-xl font-bold text-brand shadow-[var(--shadow-2)] sm:h-24 sm:w-24 sm:text-2xl">
                   {getInitials(profile.full_name)}
                 </div>
               )}
-
-              <div className="pb-0.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-xl font-bold tracking-tight text-ink sm:text-2xl">
-                    {profile.full_name || "Complete your profile"}
-                  </h1>
-                  <Badge variant="default" className="capitalize">
-                    {profile.visibility_scope}
-                  </Badge>
-                </div>
-                <p className="mt-0.5 text-sm font-medium text-ink-secondary">
-                  {profile.headline || "Add a professional headline to describe your craft."}
-                </p>
-              </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 pt-3">
               {profile.handle && profile.visibility_scope === "public" && (
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/u/${profile.handle}`} target="_blank">
@@ -157,6 +143,20 @@ export function ProfileWorkspace({
                 {editingProfile ? "Close Editor" : "Edit Profile"}
               </Button>
             </div>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-bold tracking-tight text-ink sm:text-2xl">
+                {profile.full_name || "Complete your profile"}
+              </h1>
+              <Badge variant="default" className="capitalize">
+                {profile.visibility_scope}
+              </Badge>
+            </div>
+            <p className="max-w-3xl text-sm font-medium leading-relaxed text-ink-secondary">
+              {profile.headline || "Add a professional headline to describe your craft."}
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-secondary">

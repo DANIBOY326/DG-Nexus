@@ -627,7 +627,12 @@ export function PortfolioSection({
           {visibleProjects.map((project) => {
             const evidenceExpanded = expandedEvidenceId === project.id;
             return (
-              <Card key={project.id} className="flex flex-col justify-between">
+              <Card
+                key={project.id}
+                className={`flex min-w-0 flex-col justify-between ${
+                  evidenceExpanded ? "md:col-span-2" : ""
+                }`}
+              >
                 <CardHeader>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-1.5">

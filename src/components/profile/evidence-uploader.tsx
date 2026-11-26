@@ -146,48 +146,48 @@ export function EvidenceUploader({
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-12">
-        <div className="sm:col-span-5">
-          <Input
-            type="text"
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            placeholder="Optional file caption or description"
-            aria-label="Evidence file caption"
-            maxLength={240}
-          />
-        </div>
-        <div className="sm:col-span-4">
+      <div className="space-y-2.5">
+        <Input
+          type="text"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          placeholder="Optional file caption or description"
+          aria-label="Evidence file caption"
+          maxLength={240}
+        />
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <select
             aria-label="New file visibility"
             value={visibility}
             onChange={(e) => setVisibility(e.target.value as RecordVisibilityScope)}
-            className="flex h-11 w-full rounded-lg border border-border-strong bg-surface px-3 text-sm text-ink focus-visible:outline-2 focus-visible:outline-brand"
+            className="flex h-11 min-w-0 flex-1 rounded-lg border border-border-strong bg-surface px-3 text-xs text-ink focus-visible:outline-2 focus-visible:outline-brand sm:text-sm"
           >
-            <option value="private">Private (only you — recommended)</option>
+            <option value="private">Private (only you)</option>
             <option value="connections">Connections (owner-only until M5)</option>
-            <option value="public">Public (only if parent &amp; profile are Public)</option>
+            <option value="public">Public (if parent &amp; profile are Public)</option>
           </select>
-        </div>
-        <div className="sm:col-span-3">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            onChange={handleFileChange}
-            className="sr-only"
-            id={`evidence-upload-${entityType}-${parentId}`}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            loading={uploading}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Upload className="h-4 w-4" aria-hidden="true" />
-            Upload File
-          </Button>
+
+          <div className="shrink-0">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,application/pdf"
+              onChange={handleFileChange}
+              className="sr-only"
+              id={`evidence-upload-${entityType}-${parentId}`}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full sm:w-auto"
+              loading={uploading}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Upload File
+            </Button>
+          </div>
         </div>
       </div>
 

@@ -138,13 +138,13 @@ export default async function PublicProfilePage(props: {
         {/* Public Identity Header */}
         <Card className="overflow-hidden">
           <div
-            className="h-28 w-full"
+            className="h-24 w-full sm:h-28"
             style={{ background: "var(--color-brand-gradient)" }}
             aria-hidden="true"
           />
-          <CardContent className="-mt-12 space-y-4 pb-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex items-end gap-4">
+          <CardContent className="space-y-4 pt-0 pb-6">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div className="-mt-12 shrink-0">
                 {avatarSrc ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
@@ -157,23 +157,23 @@ export default async function PublicProfilePage(props: {
                     {getInitials(profile.full_name)}
                   </div>
                 )}
-
-                <div className="pb-1">
-                  <h1 className="text-2xl font-bold tracking-tight text-ink">
-                    {profile.full_name}
-                  </h1>
-                  {profile.headline && (
-                    <p className="mt-0.5 text-sm font-medium text-ink-secondary">
-                      {profile.headline}
-                    </p>
-                  )}
-                </div>
               </div>
 
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1.5 pt-3">
                 <Badge variant="primary">{availabilityLabel}</Badge>
                 <Badge variant="default">{workArrangementLabel}</Badge>
               </div>
+            </div>
+
+            <div className="space-y-1">
+              <h1 className="text-2xl font-bold tracking-tight text-ink">
+                {profile.full_name}
+              </h1>
+              {profile.headline && (
+                <p className="max-w-3xl text-sm font-medium leading-relaxed text-ink-secondary">
+                  {profile.headline}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-secondary">
