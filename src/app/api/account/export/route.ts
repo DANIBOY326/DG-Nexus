@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { listUserOrganisations } from "@/modules/organisations/repo";
+import { getMemberPortfolioBundle } from "@/modules/portfolio/repo";
 import { buildPersonalDataExportPayload } from "@/modules/profiles/export";
-import { getOwnProfileWithSkills, listOwnConsentLogs } from "@/modules/profiles/repo";
+import { listOwnConsentLogs } from "@/modules/profiles/repo";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Self-service authenticated personal data JSON export.
+ * Self-service authenticated personal data JSON export (M2 schema v2.0.0-m2).
  * Derives user identity strictly from server-verified JWT (`supabase.auth.getUser()`)
  * and never accepts caller-supplied userId parameters.
  */
@@ -34,11 +35,20 @@ export async function GET() {
   }
 
   try {
-    const [profileRecord, consentLogs, orgs] = await Promise.all([
-      getOwnProfileWithSkills(user.id),
+    const [bundle, consentLogs, orgs] = await Promise.all([
+      getMemberPortfolioBundle(user.id),
       listOwnConsentLogs(user.id),
       listUserOrganisations(user.id),
     ]);
+
+    const evidenceFiles = bundle
+      ? [
+          ...(bundle.avatarEvidenceFile ? [bundle.avatarEvidenceFile] : []),
+          ...bundle.projects.flatMap((p) => p.evidenceFiles),
+          ...bundle.credentials.flatMap((c) => c.evidenceFiles),
+          ...bundle.educations.flatMap((e) => e.evidenceFiles),
+        ]
+      : [];
 
     const payload = buildPersonalDataExportPayload({
       account: {
@@ -51,8 +61,13 @@ export async function GET() {
         emailConfirmedAt: user.email_confirmed_at ?? null,
         accountCreatedAt: user.created_at ?? null,
       },
-      profile: profileRecord?.profile ?? null,
-      skills: profileRecord?.skills ?? [],
+      profile: bundle?.profile ?? null,
+      skills: bundle?.skills ?? [],
+      experiences: bundle?.experiences ?? [],
+      educations: bundle?.educations ?? [],
+      credentials: bundle?.credentials ?? [],
+      portfolioProjects: bundle?.projects ?? [],
+      evidenceFiles,
       organisations: orgs.map((entry) => ({
         organisationId: entry.organisation.id,
         organisationName: entry.organisation.name,
